@@ -1,4 +1,4 @@
-#shoppingCart
+# shoppingCart
 
 vue2.0实现购物车功能的小DEMO
  
