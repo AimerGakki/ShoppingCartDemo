@@ -63,11 +63,11 @@
         <div class="addr-list-wrap">
           <div class="addr-list">
             <ul>
-              <li v-for=>
+              <li v-for='(item,index) in filteredItems' :class="{check:index==currentIndex}" @click='currentIndex=index'>
                 <dl>
                   <dt>JackBean</dt>
-                  <dd class="address">北京朝阳区朝阳公园</dd>
-                  <dd class="tel">13356576785</dd>
+                  <dd class="address">{{item.streetName}}</dd>
+                  <dd class="tel">{{item.tel}}</dd>
                 </dl>
                 <div class="addr-opration addr-edit">
                   <a href="javascript:;" class="addr-edit-btn">
@@ -75,14 +75,14 @@
                   </a>
                 </div>
                 <div class="addr-opration addr-del">
-                  <a href="javascript:;" class="addr-del-btn">
+                  <a href="javascript:;" class="addr-del-btn" @click='delConfirm(item)'>
                     <svg class="icon icon-del"><use xlink:href="#icon-del"></use></svg>
                   </a>
                 </div>
-                <div class="addr-opration addr-set-default">
-                  <a href="javascript:;" class="addr-set-default-btn" ><i>设为默认</i></a>
+                <div class="addr-opration addr-set-default" v-if='!item.isDefault'>
+                  <a href="javascript:;" class="addr-set-default-btn" @click='(setDefalut(item.addressId))'><i>设为默认</i></a>
                 </div>
-                <div class="addr-opration addr-default">默认地址</div>
+                <div class="addr-opration addr-default" v-if='item.isDefault'>默认地址</div>
               </li>
 
               <li class="addr-new">
@@ -97,7 +97,7 @@
           </div>
 
           <div class="shipping-addr-more">
-            <a class="addr-more-btn up-down-btn" href="javascript:">
+            <a class="addr-more-btn up-down-btn" href="javascript:" @click='limitNumber = addressList.length'>
               more
               <i class="i-up-down">
                 <i class="i-up-down-l"></i>
@@ -114,11 +114,11 @@
         <div class="shipping-method-wrap">
           <div class="shipping-method">
             <ul>
-              <li>
+              <li :class="{'check': shippingMethod==1}"@click='shippingMethod=1'>
                 <div class="name">标准配送</div>
                 <div class="price">Free</div>
               </li>
-              <li>
+              <li :class="{'check': shippingMethod==2}"@click='shippingMethod=2'>
                 <div class="name">高级配送</div>
                 <div class="price">180</div>
               </li>
@@ -128,9 +128,9 @@
         <div class="next-btn-wrap">
           <a href="javascript:;" class="btn btn--red">下一步</a>
         </div>
-        <div class="md-modal modal-msg md-modal-transition" id="showModal">
+        <div class="md-modal modal-msg md-modal-transition" id="showModal" :class="{'md-show': delAddressFlag}">
           <div class="md-modal-inner">
-            <div class="md-top">
+            <div class="md-top" @click='delAddressFlag=false'>
               <button class="md-close">关闭</button>
             </div>
             <div class="md-content">
@@ -138,8 +138,8 @@
                 <p id="cusLanInfo">你确认删除此配送地址信息吗?</p>
               </div>
               <div class="btn-wrap col-2">
-                <button class="btn btn--m" id="btnModalConfirm">Yes</button>
-                <button class="btn btn--m btn--red" id="btnModalCancel">No</button>
+                <button class="btn btn--m" id="btnModalConfirm" @click='delAddress'>Yes</button>
+                <button class="btn btn--m btn--red" id="btnModalCancel" @click='delAddressFlag=false'>No</button>
               </div>
             </div>
           </div>
